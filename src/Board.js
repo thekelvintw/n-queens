@@ -190,6 +190,14 @@
         }
       }
       return conflict;
+    },
+    
+    getRows: function() {
+      var returnArr = [];
+      for (var i = 0; i < this.rows().length; i++) {
+        returnArr.push(this.get(i).slice());
+      }
+      return returnArr;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
