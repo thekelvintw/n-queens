@@ -16,28 +16,27 @@
 
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
-  var emptyMatrix = new Board({n: n});
+  var solution = undefined;
+  var myBoard = new Board({n: n});
   
-  var testAddRook = function(board, currRow) {
+  var testAddRook = function(currRow) {
     for (var i = 0; i < n; i++) {
       if (solution !== undefined) {
         return;
       }
-      board.togglePiece(currRow, i);
-      if (!board.hasAnyRooksConflicts()) {
+      myBoard.togglePiece(currRow, i);
+      if (!myBoard.hasAnyRooksConflicts()) {
         if (n === currRow + 1) {
-          // solution = board.rows().slice() DOES NOT WORK?
-          solution = board.getRows();
+          solution = myBoard.getRows();
         } else {
-          testAddRook(board, currRow + 1);
+          testAddRook(currRow + 1);
         }
       }
-      board.togglePiece(currRow, i);
+      myBoard.togglePiece(currRow, i);
     }
   };
   
-  testAddRook(emptyMatrix, 0);
+  testAddRook(0);
   
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
@@ -45,24 +44,24 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = 0; //fixme
-  var emptyMatrix = new Board({n: n});
+  var solutionCount = 0;
+  var myBoard = new Board({n: n});
   
-  var testAddRook = function(board, currRow) {
+  var testAddRook = function(currRow) {
     for (var i = 0; i < n; i++) {
-      board.togglePiece(currRow, i);
-      if (!board.hasAnyRooksConflicts()) {
+      myBoard.togglePiece(currRow, i);
+      if (!myBoard.hasAnyRooksConflicts()) {
         if (n === currRow + 1) {
           solutionCount++;
         } else {
-          testAddRook(board, currRow + 1);
+          testAddRook(currRow + 1);
         }
       }
-      board.togglePiece(currRow, i);
+      myBoard.togglePiece(currRow, i);
     }
   };
   
-  testAddRook(emptyMatrix, 0);
+  testAddRook(0);
   
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
@@ -70,7 +69,30 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution = undefined;
+  var myBoard = new Board({n: n});
+
+  var testAddQueen = function (currentRow) {
+    for (var i = 0; i < n; i++) {
+      if (solution !== undefined) {
+        return;
+      }
+      myBoard.togglePiece(currentRow, i);
+      if (!myBoard.hasAnyQueensConflicts()) {
+        if (n === currentRow + 1 ) {     
+          solution = myBoard.getRows();     
+        }
+        testAddQueen(currentRow + 1);   
+      }
+      myBoard.togglePiece(currentRow, i);      
+    }
+  };
+
+  testAddQueen(0);
+
+  if (!solution) {
+    solution = myBoard.getRows();
+  }
 
   console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
   return solution;
@@ -82,23 +104,23 @@ window.countNQueensSolutions = function(n) {
   if (n === 0) {
     solutionCount = 1;
   }
-  var emptyMatrix = new Board({n: n});
-  
-  var testAddQueen = function(board, currRow) {
+  var myBoard = new Board({n: n});
+
+  var testAddQueen = function(currRow) {
     for (var i = 0; i < n; i++) {
-      board.togglePiece(currRow, i);
-      if (!board.hasAnyQueensConflicts()) {
+      myBoard.togglePiece(currRow, i);
+      if (!myBoard.hasAnyQueensConflicts()) {
         if (n === currRow + 1) {
           solutionCount++;
         } else {
-          testAddQueen(board, currRow + 1);
+          testAddQueen(currRow + 1);
         }
       }
-      board.togglePiece(currRow, i);
+      myBoard.togglePiece(currRow, i);
     }
   };
   
-  testAddQueen(emptyMatrix, 0);
+  testAddQueen(0);
   
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;
