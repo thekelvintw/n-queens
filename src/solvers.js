@@ -17,7 +17,28 @@
 
 window.findNRooksSolution = function(n) {
   var solution = undefined; //fixme
-
+  var emptyMatrix = new Board({n: 2});
+  
+  var testAddRook = function(board, currRow) {
+    var newBoard = new Board(board.rows());
+    console.log('1', newBoard);
+    for (var i = 0; i < n; i++) {
+      newBoard.togglePiece(currRow, i);
+      console.log('2', newBoard);
+      if (!newBoard.hasAnyRooksConflicts()) {
+        if (n === currRow + 1) {
+          return solution = newBoard;
+        } else {
+          return testAddRook(newBoard, currRow + 1);
+        }
+      }
+      newBoard.togglePiece(currRow, i);
+    }
+  };
+  
+  console.log('empty =', emptyMatrix);
+  testAddRook(emptyMatrix, 0);
+  
   console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution;
 };
