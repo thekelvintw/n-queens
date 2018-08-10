@@ -51,16 +51,32 @@ window.countNRooksSolutions = function(n) {
   var columnVisited = new Array(n).fill(0);
 
   var testAddRook = function(currRow) {
-    for (var i = 0; i < n; i++) {
-      if (columnVisited[i] === 0) {
-        columnVisited[i] = 1;
-        if (n === currRow + 1) {
-          solutionCount++;
-        } else {
-          testAddRook(currRow + 1);
+    var loopOverRow = function (start, end) {
+      for (var i = start; i < end; i++) {
+        if (columnVisited[i] === 0) {
+          columnVisited[i] = 1;
+          if (n === currRow + 1) {
+            solutionCount++;
+          } else {
+            testAddRook(currRow + 1);
+          }
+          columnVisited[i] = 0;
         }
-        columnVisited[i] = 0;
       }
+    };
+
+    if (currRow === 0) {
+      if (n === 0 || n === 1) {
+        loopOverRow(0, n);
+      } else {
+        loopOverRow(0, Math.floor(n / 2));
+        solutionCount *= 2; // Runs on half, double the solution count since it's symmetrical
+        if (n % 2 !== 0) {
+          loopOverRow(Math.floor((n + 1) / 2), Math.floor((n + 1) / 2) + 1);
+        }
+      }
+    } else {
+      loopOverRow(0, n);
     }
   };
   
